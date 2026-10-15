@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script>document.documentElement.classList.add('js')</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ものづくりの業務改善パートナー</title>
+<meta name="description" content="現場で当たり前になっている手間やミスを見つけ、今あるExcelや紙、既存のシステムを活かして改善します。">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F4F0; --ink:#1C2226; --sub:#5B6368; --accent:#2B5A7E; --accent-d:#234B69;
+  --card:#FFFFFF; --tint:#E8EBEC; --band:#1C2226; --line:#E4E3DE; --pill:#E3EAF0;
+  --head:var(--body);
+  --body:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic","Meiryo",sans-serif;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:500;font-size:16px;line-height:1.8;-webkit-text-size-adjust:100%;word-break:auto-phrase;line-break:strict;padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+section{padding:88px 0 0}
+.eyebrow{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;margin-bottom:10px}
+h2,h3,.trouble,.way p,.steps p,.qa p{text-wrap:balance}
+h2{font-family:var(--head);font-weight:700;font-size:clamp(26px,4.2vw,34px);line-height:1.5;letter-spacing:.04em;margin-bottom:12px}
+.lead{color:var(--sub);font-size:15px;margin-bottom:28px;max-width:48em}
+.card{background:var(--card);border-radius:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;border-radius:999px;padding:12px 26px;transition:background .2s,color .2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-d)}
+.btn-ghost{border:1px solid var(--ink);background:transparent}
+.btn-ghost:hover{background:var(--ink);color:#fff}
+
+/* ヘッダー */
+header{position:sticky;top:0;z-index:10;background:rgba(245,244,240,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);transition:box-shadow .3s}
+header.scrolled{box-shadow:0 4px 18px rgba(28,34,38,.07)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand b{display:block;font-size:15px;line-height:1.3}
+.brand small{display:block;font-size:11px;color:var(--sub);line-height:1.3}
+header .btn{padding:8px 18px;font-size:14px}
+
+/* 冒頭 */
+.hero{padding:48px 0 48px}
+.hero h1{font-family:var(--head);font-weight:900;font-size:clamp(38px,8vw,64px);line-height:1.35;letter-spacing:.02em;margin:6px 0 28px}
+.hero p.desc{max-width:34em;font-size:16px;margin-bottom:32px}
+.hero .actions{display:flex;flex-wrap:wrap;gap:12px}
+
+/* 実績帯 */
+.band{background:var(--band);color:#fff;padding:44px 0;margin-top:0}
+.band .cap{font-size:13px;color:#B9C0C4;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stat strong{font-family:var(--head);font-weight:900;font-size:clamp(30px,4.5vw,38px);line-height:1.2;display:block}
+.stat strong small{font-size:.5em;font-weight:700;margin:0 1px}
+.stat > span{font-size:13px;color:#B9C0C4}
+.stat .cu{font:inherit;color:inherit}
+
+/* お困りごと */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.trouble{padding:18px 20px;display:flex;gap:12px;font-size:15px;line-height:1.7}
+.trouble::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:.65em}
+
+/* 試算 */
+.calc{background:var(--tint);border-radius:16px;padding:32px;margin-top:56px}
+.calc h3{font-family:var(--head);font-weight:700;font-size:clamp(20px,3vw,26px);line-height:1.5;margin-bottom:6px}
+.calc .note{color:var(--sub);font-size:14px;margin-bottom:20px}
+.inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.inp{background:#fff;border-radius:12px;padding:14px 14px 16px}
+.inp label{display:block;font-size:13px;color:var(--sub);margin-bottom:8px}
+.stepper{display:flex;align-items:center;justify-content:space-between}
+.stepper button{width:36px;height:36px;border-radius:50%;border:1px solid #C9CDCF;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;background:#fff}
+.stepper button:hover{border-color:var(--accent);color:var(--accent)}
+.val{font-family:var(--head);font-weight:900;font-size:22px;flex:1;text-align:center}
+.val small{font-size:13px;font-weight:700}
+.result{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.result span{font-weight:700;font-size:15px}
+.result strong{font-family:var(--head);font-weight:900;font-size:48px;line-height:1.1;color:var(--accent);display:inline-block}
+.result strong small{font-size:.45em}
+.calc .cost b{font-size:18px}
+.calc .eg{font-size:13px;color:var(--sub);margin-top:14px}
+
+/* 考え方 */
+.way{padding:22px 20px 24px}
+.way .no{font-family:var(--head);font-weight:700;color:var(--accent);font-size:13px;margin-bottom:8px}
+.way h3{font-size:16px;font-weight:700;line-height:1.6;margin-bottom:8px}
+.way p{font-size:14px;color:var(--sub);line-height:1.8}
+
+/* 事例 */
+.cases{display:grid;gap:12px}
+.case{padding:24px 24px 20px}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;color:var(--sub);margin-bottom:10px}
+.tag{background:var(--pill);color:var(--accent);font-weight:700;border-radius:999px;padding:3px 10px}
+.case h3{font-size:17px;font-weight:700;line-height:1.6;margin-bottom:4px}
+.metric{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:12px}
+.metric strong{font-family:var(--head);font-weight:900;font-size:clamp(30px,4.6vw,38px);color:var(--accent);line-height:1.3}
+.metric strong small{font-size:15px;font-weight:700;margin:0 3px}
+.metric strong small:first-child{margin-left:0}
+.stat strong small:first-child{margin-left:0}
+.metric span{font-size:13px;font-weight:700}
+.toggle{font-size:14px;font-weight:700;color:var(--accent);padding:6px 0;display:inline-flex;gap:8px}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.ba div{background:var(--bg);border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.8}
+.ba h4{font-size:13px;color:var(--sub);margin-bottom:4px}
+.ba div.after{background:var(--pill)}
+.ba div.after h4{color:var(--accent)}
+[hidden]{display:none!important}
+.others-title{font-size:16px;font-weight:700;margin:32px 0 10px}
+.others{padding:4px 24px}
+.others li{list-style:none;display:flex;justify-content:space-between;gap:16px;padding:14px 0;font-size:14px}
+.others li+li{border-top:1px solid var(--line)}
+.others li b{color:var(--accent);white-space:nowrap;text-align:right}
+
+/* 進め方 */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;list-style:none}
+.steps li{border-top:3px solid var(--accent);padding-top:14px}
+.steps .n{font-family:var(--head);font-weight:900;color:var(--accent);font-size:22px;line-height:1.2}
+.steps h3{font-size:16px;font-weight:700;margin:4px 0 6px}
+.steps p{font-size:14px;color:var(--sub)}
+.prep{margin-top:20px;font-size:14px}
+
+/* FAQ */
+.faq{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:12px}
+.qa{padding:22px 24px}
+.qa h3{font-size:15px;font-weight:700;line-height:1.6;margin-bottom:8px;display:flex;gap:10px}
+.qa h3::before{content:"Q";font-family:var(--head);font-weight:900;color:var(--accent)}
+.qa p{font-size:14px;color:var(--sub);line-height:1.8;padding-left:22px}
+
+/* プロフィール */
+.profile{display:grid;grid-template-columns:1fr 1fr;gap:44px;padding:44px 40px;align-items:stretch}
+.profile .nm{font-family:var(--head);font-weight:900;font-size:30px;letter-spacing:.08em;line-height:1.3}
+.profile .nm-lic{font-size:22px;letter-spacing:.04em;margin-bottom:18px}
+.profile .lic{font-size:14px;color:var(--sub);margin:10px 0 18px}
+.profile p{font-size:15px;line-height:2;margin-bottom:12px}
+.profile p:last-child{margin-bottom:0}
+.profile .right{display:flex;flex-direction:column}
+.profile h4{font-size:13px;color:var(--sub);font-weight:700;line-height:1.3;padding-top:6px;margin-bottom:8px}
+.career{list-style:none;flex:1;display:flex;flex-direction:column}
+.career li{flex:1;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;min-height:52px}
+.career li+li{border-top:1px solid var(--line)}
+.career b{font-weight:700;font-size:15px}
+.career span{font-size:14px;color:var(--ink);opacity:.8;text-align:right}
+
+/* ご相談 */
+.contact{background:var(--accent);color:#fff;border-radius:24px;padding:48px 56px;margin-top:0}
+.contact .eyebrow{color:#C9D9E6}
+.contact h2{font-family:var(--head);font-weight:900;font-size:clamp(26px,4.5vw,36px)}
+.contact .desc{color:#DCE6EE;font-size:15px;margin:8px 0 28px;max-width:32em}
+.contact .actions{display:flex;flex-wrap:wrap;gap:12px}
+.contact .btn-white{background:#fff;color:var(--ink);padding:14px 30px;font-size:16px}
+.contact .btn-line{border:1px solid rgba(255,255,255,.7);color:#fff}
+.contact .btn-line:hover{background:rgba(255,255,255,.12)}
+.contact .addr{margin-top:20px;font-size:15px;color:#DCE6EE;word-break:break-all}
+.contact :focus-visible{outline-color:#fff}
+
+footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px;color:var(--sub)}
+
+@media (max-width:760px){
+  br.pc{display:none}
+  section{padding-top:64px}
+  .hero{padding:36px 0 44px}
+  .stats{grid-template-columns:1fr 1fr;row-gap:24px}
+  .grid3,.inputs,.faq,.ba,.profile{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr;row-gap:24px}
+  .calc{padding:24px 18px}
+  .profile{padding:30px 22px;gap:24px}
+  .career li{flex:none}
+  .contact{padding:36px 24px;border-radius:20px}
+  .others{padding:4px 18px}
+  .case{padding:22px 18px 16px}
+}
+.js .rv{opacity:0;transform:translateY(22px)}
+.js .rv.in{opacity:1;transform:none;transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="wrap">
+    <div class="brand"><b>ものづくりの業務改善パートナー</b><small>1級機械保全技能士（機械）</small></div>
+    <a class="btn btn-primary" href="#contact">相談する</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">ものづくりに関する業務改善</p>
+    <h1>人と現場に、<br>もっと価値ある<br>時間を。</h1>
+    <p class="desc">現場で「当たり前」になっている手間やミスを見つけ、<br class="pc">今あるExcelや紙、既存のシステムを活かして改善します。</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#contact">まずは気軽に相談する</a>
+      <a class="btn btn-ghost" href="#cases">改善の実績を見る</a>
+    </div>
+  </div>
+</section>
+
+<div class="band">
+  <div class="wrap">
+    <p class="cap">今あるツールのまま、ここまで変わりました</p>
+    <div class="stats">
+      <div class="stat"><strong><small>年</small><span class="cu" data-to="130">130</span><small>時間</small></strong><span>転記作業の削減</span></div>
+      <div class="stat"><strong><span class="cu" data-to="200">200</span><small>万円以上</small></strong><span>価格交渉での利益確保</span></div>
+      <div class="stat"><strong><span class="cu" data-from="30" data-to="0">0</span><small>件</small></strong><span>改善後の転記ミス</span></div>
+      <div class="stat"><strong><span class="cu" data-from="10" data-to="0">0</span><small>個</small></strong><span>新たに購入したツール</span></div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">お困りごと</p>
+    <h2>こんなこと、ありませんか？</h2>
+    <div class="grid3" style="margin-top:24px">
+      <p class="card trouble">紙に手書きした記録を、あとでパソコンに打ち直している</p>
+      <p class="card trouble">同じ内容を、別の表やシステムに二重入力している</p>
+      <p class="card trouble">Excelファイルが増えすぎて、どれが最新か分からない</p>
+      <p class="card trouble">「あの人しか分からない」仕事がある</p>
+      <p class="card trouble">必要な情報や過去の資料が、すぐに見つからない</p>
+      <p class="card trouble">何とかしたいが、相談相手も時間もない</p>
+    </div>
+
+    <div class="calc">
+      <p class="eyebrow">見えないコスト</p>
+      <h3>毎日の「少しの手間」は、1年で大きな時間になります</h3>
+      <p class="note">御社の場合に置きかえて、数字を変えてみてください。</p>
+      <div class="inputs">
+        <div class="inp">
+          <label id="lb-min">1人あたり1日の手間</label>
+          <div class="stepper">
+            <button type="button" data-k="min" data-d="-5" aria-label="手間を5分減らす">−</button>
+            <span class="val" aria-live="polite" aria-labelledby="lb-min"><span id="v-min">15</span><small>分</small></span>
+            <button type="button" data-k="min" data-d="5" aria-label="手間を5分増やす">＋</button>
+          </div>
+        </div>
+        <div class="inp">
+          <label id="lb-ppl">その作業をする人数</label>
+          <div class="stepper">
+            <button type="button" data-k="ppl" data-d="-1" aria-label="人数を1人減らす">−</button>
+            <span class="val" aria-live="polite" aria-labelledby="lb-ppl"><span id="v-ppl">5</span><small>人</small></span>
+            <button type="button" data-k="ppl" data-d="1" aria-label="人数を1人増やす">＋</button>
+          </div>
+        </div>
+        <div class="inp">
+          <label>年間の稼働日</label>
+          <div class="stepper"><span class="val">240<small>日</small></span></div>
+        </div>
+      </div>
+      <div class="result"><span>1年で</span><strong id="v-hr">300<small>時間</small></strong></div>
+      <p class="cost">時給3,000円とすると、年 <b>約<span id="v-cost">90</span>万円</b> 分の時間です。</p>
+      <p class="eg">実例：見積書の転記に、1件5分 × 月80件 ＝ 年80時間かかっていた業務は、改善後に年72時間減りました。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">考え方</p>
+    <h2>今あるものを最大限活用</h2>
+    <p class="lead">目的は、新しいツールやシステムを入れることではなく、現場の問題を効果的に解決することです。<br>まずは御社がすでにお持ちのものを最大限に活かします。</p>
+    <div class="grid3">
+      <div class="card way"><p class="no">01</p><h3>現場の声から、問題を見つける</h3><p>担当の方に1回30分ほどお話を伺い、「当たり前」になっている手間やミスの原因を整理します。</p></div>
+      <div class="card way"><p class="no">02</p><h3>今あるツールで改善する</h3><p>紙の書類、Excel、既存のシステム、CAD、スマホ・タブレットなど、手元にあるものを使います。</p></div>
+      <div class="card way"><p class="no">03</p><h3>「当たり前」になるまで伴走する</h3><p>操作マニュアルや運用ルールも用意し、現場に定着するまで一緒に確認します。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <p class="eyebrow">実績</p>
+    <h2>これまでの改善事例</h2>
+    <p class="lead">製造業の現場で、これまでに取り組んだ改善の一部です。</p>
+    <div class="cases">
+      <article class="card case">
+        <div class="meta"><span class="tag">営業・事務</span>使ったもの：Excel・Python・プリンタ</div>
+        <h3>見積書の転記を自動化</h3>
+        <div class="metric"><strong><small>転記の手間</small>90<small>%減</small></strong><span>年72時間の削減</span></div>
+        <button type="button" class="toggle" aria-expanded="false" aria-controls="ba1">改善前と改善後を見る<span aria-hidden="true">＋</span></button>
+        <div class="ba" id="ba1" hidden>
+          <div><h4>改善前</h4>取引先ごとに書式が違う見積書を見ながら、1行ずつExcelへ手入力。スキャンしたPDFは文字をコピーできず、目で見て打つしかない。1件5分 × 月80件。</div>
+          <div class="after"><h4>改善後</h4>PDFを保存して実行するだけで、品番・数量・単価・金額を読み取り1つの表に集約。金額の検算と合計の照合も自動。データは社内のパソコンの中だけで処理。</div>
+        </div>
+      </article>
+      <article class="card case">
+        <div class="meta"><span class="tag">営業</span>使ったもの：Excel</div>
+        <h3>価格交渉の判断シート</h3>
+        <div class="metric"><strong><small>利益</small>200<small>万円以上を確保</small></strong><span>判断時間 30分 → 5分</span></div>
+        <button type="button" class="toggle" aria-expanded="false" aria-controls="ba2">改善前と改善後を見る<span aria-hidden="true">＋</span></button>
+        <div class="ba" id="ba2" hidden>
+          <div><h4>改善前</h4>値引きのご要望に、電卓や経験で回答。いくらまでなら利益を守れるかが分からず、判断の根拠も残らない。</div>
+          <div class="after"><h4>改善後</h4>ご要望額と条件を入力するだけで、目標の利益率を守れる上限額と、成約時の利益率をその場で表示。上司への説明にもそのまま使える。</div>
+        </div>
+      </article>
+      <article class="card case">
+        <div class="meta"><span class="tag">設計・技術</span>使ったもの：Excel・Outlook</div>
+        <h3>設計ノウハウを、会社の資産に</h3>
+        <div class="metric"><strong><small>準備の手間</small>75<small>%減</small></strong><span>レビュー準備 60分 → 15分</span></div>
+        <button type="button" class="toggle" aria-expanded="false" aria-controls="ba3">改善前と改善後を見る<span aria-hidden="true">＋</span></button>
+        <div class="ba" id="ba3" hidden>
+          <div><h4>改善前</h4>過去の不具合や指摘から得たノウハウは担当者の頭の中。判断基準が人によってばらつき、退職や異動で消えてしまう。</div>
+          <div class="after"><h4>改善後</h4>「チェック項目・判定基準・背景」を1つの一覧に集約。改訂の履歴を残し、関係者へのお知らせメールも自動で作成。</div>
+        </div>
+      </article>
+    </div>
+
+    <h3 class="others-title">そのほかの改善</h3>
+    <ul class="card others">
+      <li>図面・部品情報から仕様書への自動転記<b>年130時間削減・転記ミス0件</b></li>
+      <li>見積後のフォロー・案件管理の自動化<b>対応漏れ80%減</b></li>
+      <li>スマホで日報入力、週報を半自動作成<b>週報作成の手間90%減</b></li>
+      <li>過去案件を条件から探せるデータベース<b>検索の手間70%減</b></li>
+      <li>検査・点検記録をタブレットで電子化<b>紙の使用量ゼロ</b></li>
+      <li>現場のトラブル情報を写真つきで共有<b>共有率 60% → 90%</b></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">進め方</p>
+    <h2>まずは、お話を聞くところから</h2>
+    <ol class="steps" style="margin-top:24px">
+      <li><p class="n">1</p><h3>ご相談</h3><p>メールで、困っている業務を1つお聞かせください。</p></li>
+      <li><p class="n">2</p><h3>現場のヒアリング</h3><p>1回30分ほどお話を伺い、その日のうちに手間のかかっている業務を整理してお伝えします。</p></li>
+      <li><p class="n">3</p><h3>改善のご提案</h3><p>何から手をつけると効果が大きいかをお示しします。進めるかどうかは、それからご判断ください。</p></li>
+      <li><p class="n">4</p><h3>改善と定着</h3><p>改善を形にし、マニュアルを用意して、現場で使い続けられるまで確認します。</p></li>
+    </ol>
+    <p class="prep">ご準備いただくものはありません。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">よくあるご質問</p>
+    <h2>ご相談の前に</h2>
+    <div class="faq" style="margin-top:24px">
+      <div class="card qa"><h3>社員の負担は大きくありませんか？</h3><p>1回30分ほどのヒアリングが中心です。資料のご準備はいりません。</p></div>
+      <div class="card qa"><h3>ITに詳しい人がいませんが。</h3><p>今お使いのExcelなどを使い、操作マニュアルもお作りします。専門知識は必要ありません。</p></div>
+      <div class="card qa"><h3>社内の情報が外に出ませんか？</h3><p>必要に応じて秘密保持契約（NDA）を結びます。データは御社のパソコンの中で処理し、社外へは送りません。</p></div>
+      <div class="card qa"><h3>途中でやめることはできますか？</h3><p>区切りごとにご判断いただけます。話を聞いてみるだけでも構いません。</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">プロフィール</p>
+    <div class="card profile">
+      <div>
+        <p class="nm nm-lic">1級機械保全技能士（機械）</p>
+        <p>製造業で約10年。開発、技術・装置設計、検査・評価から技術営業まで、現場に近い立場で仕事をしてきました。</p>
+        <p>改善できると分かっていても、部署の壁や人手・時間の不足で手がつけられない。そんな会社の、外の相談相手になりたいと考えています。現在は会社員として働きながら、独立に向けて準備しています。</p>
+      </div>
+      <div class="right">
+        <h4>経験してきた業界と仕事</h4>
+        <ul class="career">
+          <li><b>冷凍・空調</b><span>開発・技術・検査・評価</span></li>
+          <li><b>製薬・食品機械</b><span>装置設計（機械）</span></li>
+          <li><b>食品</b><span>技術（機械）</span></li>
+          <li><b>半導体</b><span>技術営業</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <p class="eyebrow">ご相談</p>
+      <h2>まずは、お困りごとを<br>1つお聞かせください。</h2>
+      <p class="desc">「こんなことでも相談していいのか」と迷うような内容でも構いません。ご連絡はメールでお受けしています。</p>
+      <div class="actions">
+        <a class="btn btn-white" id="mail-btn" href="#">メールで相談する</a>
+        <button type="button" class="btn btn-line" id="copy-btn">アドレスをコピー</button>
+      </div>
+      <p class="addr" id="addr"></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><span>ものづくりの業務改善パートナー</span><span>© 2026</span></div>
+</footer>
+
+<script>
+(function(){
+  // 連絡先（ここだけ書き換えれば全体に反映）
+  var MAIL = 'tanimoto.yhk@gmail.com';
+  var subject = '業務改善のご相談';
+  var body = '会社名：\nお名前：\n\n困っている業務：\n\n';
+  document.getElementById('addr').textContent = MAIL;
+  document.getElementById('mail-btn').href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  var cb = document.getElementById('copy-btn');
+  cb.addEventListener('click', function(){
+    var show = function(msg){ cb.textContent = msg; setTimeout(function(){ cb.textContent = 'アドレスをコピー'; }, 2000); };
+    var ok = function(){ show('コピーしました'); }, ng = function(){ show('コピーできませんでした'); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(MAIL).then(ok, ng); else ng();
+  });
+
+  // 試算
+  var st = {min:15, ppl:5};
+  var lim = {min:[5,240], ppl:[1,50]};
+  function render(){
+    var h = Math.round(st.min * st.ppl * 240 / 60);
+    document.getElementById('v-min').textContent = st.min;
+    document.getElementById('v-ppl').textContent = st.ppl;
+    document.getElementById('v-hr').innerHTML = h.toLocaleString('ja-JP') + '<small>時間</small>';
+    document.getElementById('v-cost').textContent = Math.round(h * 3000 / 10000).toLocaleString('ja-JP');
+  }
+  document.querySelectorAll('[data-k]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.dataset.k, v = st[k] + Number(b.dataset.d);
+      st[k] = Math.min(lim[k][1], Math.max(lim[k][0], v)); render();
+    });
+  });
+
+  // 開閉（事例・よくあるご質問）
+  document.querySelectorAll('[aria-controls]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = document.getElementById(b.getAttribute('aria-controls'));
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', open); t.hidden = !open;
+      var mark = b.querySelector('span,i');
+      if (b.classList.contains('toggle')) b.firstChild.textContent = open ? '閉じる' : '改善前と改善後を見る';
+      if (mark) mark.textContent = open ? '−' : '＋';
+    });
+  });
+
+  // ふわっと表示・カウントアップ
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function countUp(el){
+    var from = +(el.dataset.from || 0), to = +el.dataset.to, t0 = performance.now(), dur = 1400;
+    (function step(t){
+      var p = Math.min(1, Math.max(0, (t - t0) / dur));
+      el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  var sel = '.hero .wrap > *, .band .cap, .stat, section .eyebrow, section h2, section .lead, .trouble, .calc, .way, .case, .others-title, .others li, .steps li, .prep, .qa, .profile, .contact';
+  var items = Array.prototype.slice.call(document.querySelectorAll(sel));
+  if (reduce || !('IntersectionObserver' in window)) {
+    items.forEach(function(el){ el.classList.add('rv','in'); });
+  } else {
+    items.forEach(function(el){
+      el.classList.add('rv');
+      var i = Array.prototype.indexOf.call(el.parentElement.children, el);
+      el.style.transitionDelay = Math.min(i, 6) * 80 + 'ms';
+      var c = el.querySelector('.cu'); if (c) c.textContent = c.dataset.from || '0';
+    });
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var el = e.target; el.classList.add('in'); io.unobserve(el);
+        var c = el.querySelector('.cu'); if (c) countUp(c);
+      });
+    }, {rootMargin:'0px 0px -8% 0px'});
+    items.forEach(function(el){ io.observe(el); });
+  }
+
+  // ヘッダーの影
+  var hd = document.getElementById('top');
+  addEventListener('scroll', function(){ hd.classList.toggle('scrolled', scrollY > 8); }, {passive:true});
+})();
+</script>
+</body>
+</html>
