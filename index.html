@@ -160,9 +160,9 @@ input[type=range]{width:100%;accent-color:var(--accent);height:28px;min-width:0}
 
 .peek{display:none}
 @media (max-width:1024px){
-  .peek{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--band);color:#fff;border-radius:16px;padding:12px 18px;justify-content:space-between;align-items:center;gap:12px;font-size:13px;box-shadow:0 10px 30px rgba(28,34,38,.25);transform:translateY(140%);transition:transform .35s var(--ease)}
+  .peek{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--band);color:#fff;border-radius:16px;padding:12px 18px;justify-content:space-between;align-items:center;gap:12px;font-size:13px;box-shadow:0 10px 30px rgba(28,34,38,.25);transform:translateY(calc(100% + 80px));opacity:0;visibility:hidden;transition:transform .35s var(--ease),opacity .25s,visibility 0s .35s}
   .peek b{font-size:17px;white-space:nowrap}
-  .peek.show{transform:none}
+  .peek.show{transform:none;opacity:1;visibility:visible;transition:transform .35s var(--ease),opacity .25s,visibility 0s}
 }
 /* 転記レース */
 .race{background:var(--band);color:#fff;margin-top:clamp(88px,12vw,160px);padding:clamp(72px,9vw,120px) 0}
@@ -338,13 +338,17 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
   .pm{width:32px;height:32px}
   .result{padding:22px}
   .bar{grid-template-columns:6.5em 1fr 4.2em}
-  .race-board{grid-template-columns:1fr;gap:12px}
-  .mid{order:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .race-board{grid-template-columns:1fr 1fr;gap:8px;margin-top:28px}
+  .doc,.ledger{padding:12px 10px;border-radius:14px}
+  .doc h3,.ledger h3{font-size:12px;margin-bottom:6px}
+  .lg{display:none}
+  .rowx,.rowx.hd{grid-template-columns:1fr 2.4em 3.3em;gap:4px;padding:7px 6px;font-size:12px;min-height:34px}
+  .rowx > span:nth-child(2){display:none}
+  .ledger .rowx{min-height:34px}
+  .mid{grid-column:1/-1;order:3;display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .mid .btn{min-width:0;width:100%}
-  .ledger{order:1}
   .mid .timer{min-width:0}
   .mid .timer strong{font-size:26px}
-  .rowx{grid-template-columns:4.8em 1fr 2.4em 4.4em;font-size:12.5px;padding:8px}
   .casebox{grid-template-columns:1fr;border-radius:22px}
   .ba{min-height:12em}
   .others{grid-template-columns:1fr}
@@ -470,7 +474,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
     <p class="lead">左の<wbr>見積書の<wbr>行を、<wbr>上から<wbr>順に<wbr>押して<wbr>台帳へ<wbr>転記してください。<wbr>終わったら<wbr>「仕組みで<wbr>転記」と<wbr>比べてみましょう。</p>
     <div class="race-board">
       <div class="doc">
-        <h3><span>見積書<wbr>（取引先から<wbr>届いた<wbr>PDF）</span><span id="docCount">0 / 5</span></h3>
+        <h3><span>見積書<span class="lg">（取引先から<wbr>届いた<wbr>PDF）</span></span><span id="docCount">0 / 5</span></h3>
         <div class="rowx hd"><span>品番</span><span>品名</span><span class="r">数量</span><span class="r">単価</span></div>
         <div id="srcRows"></div>
       </div>
@@ -481,7 +485,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
         <button class="btn btn-line" id="btnReset" type="button">もう一度</button>
       </div>
       <div class="ledger">
-        <h3><span>社内の<wbr>台帳<wbr>（Excel）</span><span id="ledgerCheck"></span></h3>
+        <h3><span>社内の<wbr>台帳<span class="lg">（Excel）</span></span><span id="ledgerCheck"></span></h3>
         <div class="rowx hd"><span>品番</span><span>品名</span><span class="r">数量</span><span class="r">単価</span></div>
         <div id="dstRows"></div>
       </div>
@@ -642,7 +646,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
     var cur = null;
     links.forEach(function(a){ var t = document.querySelector(a.getAttribute('href')); if (t && t.getBoundingClientRect().top < innerHeight * .4) cur = a; });
     links.forEach(function(a){ a.classList.toggle('on', a === cur); });
-    story(); flow();
+    story(); flow(); peekCheck();
   }
 
   /* ---------- 見出しの文字アニメーション ---------- */
@@ -820,12 +824,14 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
   calc();
   $('#toForm').addEventListener('click', function(){ $('#attach').checked = true; });
 
-  var peek = $('#peek');
-  if ('IntersectionObserver' in window){
-    var tIn = false, rIn = false;
-    var po = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.target.id === 'tasks') tIn = e.isIntersecting; else rIn = e.isIntersecting; }); peek.classList.toggle('show', tIn && !rIn); });
-    po.observe($('#tasks')); po.observe($('.result'));
+  var peek = $('#peek'), tasksEl = $('#tasks'), resultEl = $('.result');
+  function peekCheck(){
+    if (innerWidth > 1024){ peek.classList.remove('show'); return; }
+    var t = tasksEl.getBoundingClientRect(), r = resultEl.getBoundingClientRect();
+    var on = t.top < innerHeight * .55 && t.bottom > innerHeight * .45 && r.top > innerHeight - 40;
+    peek.classList.toggle('show', on);
   }
+  peek.addEventListener('click', function(e){ e.preventDefault(); scrollTo({ top: resultEl.getBoundingClientRect().top + scrollY - 76, behavior: reduce ? 'auto' : 'smooth' }); });
 
   /* ---------- 転記レース ---------- */
   var ROWS = [
