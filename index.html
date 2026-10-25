@@ -6,6 +6,11 @@
 <title>ものづくりの業務改善パートナー</title>
 <meta name="description" content="現場で当たり前になっている手間やミスを見つけ、今あるExcelや紙、既存のシステムを活かして改善します。">
 <meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2B5A7E">
+<meta name="apple-mobile-web-app-title" content="業務改善">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +25,7 @@
 }
 *,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
 html{scroll-padding-top:72px;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-weight:500;font-size:16px;line-height:1.8;word-break:keep-all;overflow-wrap:anywhere;line-break:strict;padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-weight:500;font-size:16px;line-height:1.8;word-break:keep-all;overflow-wrap:anywhere;line-break:strict;padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden;overflow-x:clip}
 a{color:inherit;text-decoration:none}
 button,input,select,textarea{font:inherit;color:inherit}
 button{background:none;border:none;cursor:pointer}
@@ -61,7 +66,7 @@ nav.gnav a.link.on{color:var(--accent)}
 .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
 .hero h1 .ch{display:inline-block;transform:translateY(110%);transition:transform .9s var(--ease)}
 .hero.go h1 .ch{transform:none}
-.rotator{margin-top:clamp(20px,3vw,36px);font-size:clamp(20px,2.6vw,30px);font-weight:700;display:flex;flex-wrap:wrap;align-items:center;gap:.2em}
+.rotator{margin-top:clamp(20px,3vw,36px);font-size:clamp(20px,2.6vw,30px);font-weight:700;display:flex;flex-wrap:nowrap;align-items:center;gap:.2em;white-space:nowrap}
 .rot{display:inline-block;height:1.5em;overflow:hidden;vertical-align:bottom;position:relative;transition:width .6s var(--ease)}
 .rot .rl{display:block;transition:transform .7s var(--ease)}
 .rot .rl > span{display:block;height:1.5em;line-height:1.5em;color:#fff;background:var(--accent);padding:0 .45em;border-radius:6px;white-space:nowrap;width:max-content}
@@ -75,7 +80,9 @@ nav.gnav a.link.on{color:var(--accent)}
 .slip i::after{right:45%;top:58%}
 .slip.head i{background:var(--accent)}
 .slip.head i::before,.slip.head i::after{background:rgba(255,255,255,.55)}
-.field.order .slip i{animation:none}
+.field.order .slip i,.field.paused .slip i{animation:none}
+@media (hover:none){.slip i{animation:none}}
+.slip{will-change:auto}
 @keyframes float{from{transform:translateY(-5px) rotate(-1.5deg)}to{transform:translateY(5px) rotate(1.5deg)}}
 .field-hint{position:absolute;right:24px;bottom:28px;z-index:3;font-size:13px;color:var(--sub);display:block;background:rgba(245,244,240,.85);padding:6px 12px;border-radius:999px}
 .field-hint b{color:var(--accent)}
@@ -290,6 +297,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
 
 /* タブレット */
 @media (max-width:1024px){
+  header.solid{background:rgba(245,244,240,.97);backdrop-filter:none;-webkit-backdrop-filter:none}
   nav.gnav a.link{display:none}
   .hero{flex-direction:column;align-items:stretch;min-height:auto}
   .field{position:relative;order:2;width:auto;height:300px;margin:40px 24px 0;opacity:1}
@@ -308,6 +316,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
 /* スマホ */
 @media (max-width:680px){
   br.pc{display:none}
+  .rotator{flex-direction:column;align-items:flex-start;gap:4px}
   .wrap{padding:0 18px}
   .hero{padding:96px 0 48px;align-items:stretch}
   .hero h1{font-size:clamp(38px,11.4vw,60px)}
@@ -713,8 +722,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
     slips.forEach(function(s){ s.el.style.transitionDelay = '0ms'; }); place();
   });
   buildField();
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(es){ field.classList.toggle('paused', !es[0].isIntersecting); }).observe(field);
   if (reduce) toggleField(); else setTimeout(function(){ if (!ordered) toggleField(); }, 2600);
-  var rz; addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ var o = ordered; ordered = false; buildField(); if (o){ ordered = true; field.classList.add('order'); place(); } }, 250); });
+  var lastW = innerWidth, rz; addEventListener('resize', function(){ if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(rz); rz = setTimeout(function(){ var o = ordered; ordered = false; buildField(); if (o){ ordered = true; field.classList.add('order'); place(); } }, 250); });
 
   /* ---------- カウントアップ／ダウン ---------- */
   function countUp(el){
@@ -727,7 +737,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
   for (var d = 0; d < 240; d++) days.appendChild(document.createElement('i'));
   var dayEls = days.children, chainLis = [].slice.call(document.querySelectorAll('#chain li'));
   var caps = ['ほとんど​気に​ならない​長さです。', '毎日、​1時間以上が​消えています。', '誰も​気づかないまま、​1日ずつ積み上がります。', 'これが​「当たり前の​手間」の​正体です。'];
-  var lastStage = -1;
+  var lastStage = -1, lastKey = '';
   function story(){
     var r = st.getBoundingClientRect(), total = st.offsetHeight - innerHeight;
     var p = clamp(-r.top / total, 0, 1), s = Math.min(3, Math.floor(p * 4)), lp = clamp(p * 4 - s, 0, 1);
@@ -741,7 +751,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
     else if (s === 1) big.innerHTML = Math.round(15 + 60 * e) + '<small>分​／日</small>';
     else if (s === 2){ filled = Math.max(1, Math.round(240 * e)); big.innerHTML = fmt(1.25 * filled) + '<small>時間</small>'; }
     else { filled = 240; big.innerHTML = fmt(90 * e) + '<small>万円</small>'; }
-    for (var i = 0; i < 240; i++) dayEls[i].className = i < filled ? 'on' : (s === 1 && i < 5 ? 'ppl' : '');
+    var key = s + ':' + filled;
+    if (key !== lastKey){ lastKey = key; for (var i = 0; i < 240; i++) dayEls[i].className = i < filled ? 'on' : (s === 1 && i < 5 ? 'ppl' : ''); }
     $('#daysR').textContent = filled + ' / 240日';
     $('#daysL').textContent = s === 1 ? '薄い​色＝同じ​作業を​する​5人' : '1マス＝1日';
   }
@@ -983,7 +994,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;f
     items.forEach(function(el){ io.observe(el); });
   }
 
-  addEventListener('scroll', function(){ requestAnimationFrame(onScroll); }, { passive:true });
+  var ticking = false;
+  addEventListener('scroll', function(){ if (ticking) return; ticking = true; requestAnimationFrame(function(){ ticking = false; onScroll(); }); }, { passive:true });
   addEventListener('resize', onScroll);
   onScroll();
 })();
